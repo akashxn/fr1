@@ -17,33 +17,38 @@ Akash Negi | akashxn@icloud.com
 
 ```sql
 
-SELECT TOP 5 Brands.name, count(*) Total
+SELECT Brands.name, count(*) Total
 FROM Receipts
-JOIN rewardsReceiptItemList
+RIGHT JOIN rewardsReceiptItemList
  ON Receipt._id = rewardsReceiptItemList._id
-JOIN Brands
+LEFT JOIN Brands
  ON Brands.barcode = rewardsReceiptItemList.barcode
-WHERE month(Receipts.createDate) = month(now());
+WHERE month(Receipts.createDate) = month(now())
+AND
+year(Receipts.createDate) = year(now())
+GROUP BY Brands.name
+ORDER BY Total DESC
+LIMIT 5;
 
 ```
 
 ### 2) How does the ranking of the top 5 brands by receipts scanned for the recent month compare to the ranking for the previous month?
 
 ```sql
-SELECT Brands.name,
-       RANK() OVER(PARTITION BY month(Receipt.crateDate) ORDER BY Total DESC) Rank
-       
-FROM (
-
-SELECT Brands.name, count(*) Total
+SELECT * FROM
+(
+SELECT Brands.name, month(Receipt.createDate)
+       RANK() OVER(PARTITION BY month(Receipt.createDate) ORDER BY count(*) DESC) Rank
 FROM Receipts
-JOIN rewardsReceiptItemList
+RIGHT JOIN rewardsReceiptItemList
  ON Receipt._id = rewardsReceiptItemList._id
-JOIN Brands
+LEFT JOIN Brands
  ON Brands.barcode = rewardsReceiptItemList.barcode
-WHERE month(Receipts.createDate) = month(now()) OR
-month(Receipts.createDate) = month(now()) - 1
-);
+WHERE (month(Receipts.createDate) = month(now()) AND year(Receipts.createDate) = year(now())) OR 
+(month(Receipts.createDate) = month(now())-1 AND year(Receipts.createDate) = year(now())-1)
+) a
+
+WHERE a.Rank <=  5;
 
 ```
 
@@ -77,14 +82,16 @@ WHERE rewardsReceiptStatus = 'Rejected';
 ```sql
 SELECT Brand.name, SUM(Receipts.totalSpent) AS spend
 FROM Receipts
-JOIN rewardsReceiptItemList
+RIGHT JOIN rewardsReceiptItemList
  ON Receipt._id = rewardsReceiptItemList._id
-JOIN Brands
+LEFT JOIN Brands
  ON Brands.barcode = rewardsReceiptItemList.barcode
-JOIN Users
+LEFT JOIN Users
  ON Receipts.userId = Users._id
-WHERE month(Users.CreatedDate) BETWEEN month(now()) - 6 AND month(now())
-ORDER BY spend DESC;
+WHERE Users.CreatedDate >= DATE_SUB(now(), INTERVAL 6 month)
+GROUP BY Brand.name
+ORDER BY spend DESC
+LIMIT 1;
 ```
 
 
@@ -92,14 +99,16 @@ ORDER BY spend DESC;
 ```sql
 SELECT Brand.name, COUNT(Receipts.totalSpent) AS transactions
 FROM Receipts
-JOIN rewardsReceiptItemList
+RIGHT JOIN rewardsReceiptItemList
  ON Receipt._id = rewardsReceiptItemList._id
-JOIN Brands
+LEFT JOIN Brands
  ON Brands.barcode = rewardsReceiptItemList.barcode
-JOIN Users
+LEFT JOIN Users
  ON Receipts.userId = Users._id
-WHERE month(Users.CreatedDate) BETWEEN month(now()) - 6 AND month(now())
-ORDER BY spend DESC;
+WHERE Users.CreatedDate >= DATE_SUB(now(), INTERVAL 6 month)
+GROUP BY Brand.name
+ORDER BY transactions DESC
+LIMIT 1;
 
 ```
 
