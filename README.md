@@ -138,13 +138,24 @@ There are a lot of missing values (refer to above image or fr.ipynb for code).
 
 # Fourth: Communicate with Stakeholders
 
+> Slack Message 
+
 Hi [first name],
 
 Hope all is well. I just wanted to let you know that I set up a new data warehourse for all of our data and am in the process of analyzing it. I have a couple of questions regarding the way we get data and some insights for you.
-I discoverd some data quality issues which might have something to do with the way we get our data / 3rd party services we use to gather data. There is a lot of missing data for customers. For example, we do not have Sign Up Source for multiple users. This piece of information would be crucial for our marketing efforts and to better understand where our customers are coming from. Now, talking about Brands, a lot of brand categories are missing too. In addition to this, we somehow have duplicate barcodes for unique products which might cause issues in future. I would like to know if we are tracking signup source for our users using a third party service or inhouse? Based on that I can suggest ways to improve. Also if you can help me understand why we do not have unique barcodes for some products, that would be helpful for my workflow and analysis.
+I discoverd some data quality issues which might have something to do with the way we get our data / 3rd party services we use to gather data.
+- There is a lot of missing data for customers. For example, we do not have Sign Up Source for multiple users. This piece of information would be crucial for our marketing efforts and to better understand where our customers are coming from.
+- Now, talking about Brands, a lot of brand categories are missing too. 
+- In addition to this, we somehow have duplicate barcodes for unique products which might cause issues in future.
+
+I would like to know if we are tracking signup source for our users using a third party service or inhouse? Based on that I can suggest ways to improve. Also if you can help me understand why we do not have unique barcodes for some products, that would be helpful for my workflow and analysis.
 In order to better fulfill the company's data and reporting needs, I would like to know if there are any specific areas we would like to improve on or pay more attention to? I can cater to that specifically. Are there any specific reports/insights you would like me to deliver that helps you with decision making? Feel free to reach out anytime for any ad-hoc reports.
 As our company is growing rapidly, are you looking at alternative data sources in the near future? Maybe we could make use of some more demographics data and Ad campaign data. This would help us better track our user behaviour and we can run targeted Ads based on that.
 Speaking about future growth, out data is constantly growing and right now we are hosting all of it locally. For future I would suggest we move everything to cloud like AWS or Azure. Doing this would help up scale without any problems and our data can be accessed at higher speeds as it grows exponentially.
+
+Feel free to continue this chat on Slack or let me know when I can give you a quick call to discuss.
+
+Cheers!
 
 
 
