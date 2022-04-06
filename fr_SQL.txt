@@ -1,0 +1,104 @@
+1) What are the top 5 brands by receipts scanned for most recent month?
+
+SELECT Brands.name, count(*) Total
+FROM Receipts
+RIGHT JOIN rewardsReceiptItemList
+ ON Receipt._id = rewardsReceiptItemList._id
+LEFT JOIN Brands
+ ON Brands.barcode = rewardsReceiptItemList.barcode
+WHERE month(Receipts.createDate) = month(now())
+AND
+year(Receipts.createDate) = year(now())
+GROUP BY Brands.name
+ORDER BY Total DESC
+LIMIT 5;
+
+==========================================================
+
+2) How does the ranking of the top 5 brands by receipts scanned for the recent month compare to the ranking for the previous month?
+
+SELECT * FROM
+(
+SELECT Brands.name, month(Receipt.createDate)
+       RANK() OVER(PARTITION BY month(Receipt.createDate) ORDER BY count(*) DESC) Rank
+FROM Receipts
+RIGHT JOIN rewardsReceiptItemList
+ ON Receipt._id = rewardsReceiptItemList._id
+LEFT JOIN Brands
+ ON Brands.barcode = rewardsReceiptItemList.barcode
+WHERE (month(Receipts.createDate) = month(now()) AND year(Receipts.createDate) = year(now())) OR 
+(month(Receipts.createDate) = month(now())-1 AND year(Receipts.createDate) = year(now())-1)
+) a
+
+WHERE a.Rank <=  5;
+
+
+==========================================================
+
+3) When considering average spend from receipts with 'rewardsReceiptStatus’ of ‘Accepted’ or ‘Rejected’, which is greater?
+
+SELECT AVG(totalSpent) AS avgSpend
+FROM Receipts
+WHERE rewardsReceiptStatus = 'Accepted';
+
+SELECT AVG(totalSpent) AS avgSpend
+FROM Receipts
+WHERE rewardsReceiptStatus = 'Rejected';
+
+==========================================================
+
+4) When considering total number of items purchased from receipts with 'rewardsReceiptStatus’ of ‘Accepted’ or ‘Rejected’, which is greater?
+
+SELECT SUM(purchasedItemCount) AS totalItemsPurchased
+FROM Receipts
+WHERE rewardsReceiptStatus = 'Accepted';
+
+SELECT SUM(purchasedItemCount) AS totalItemsPurchased
+FROM Receipts
+WHERE rewardsReceiptStatus = 'Rejected';
+
+==========================================================
+
+5) Which brand has the most spend among users who were created within the past 6 months?
+
+SELECT Brand.name, SUM(Receipts.totalSpent) AS spend
+FROM Receipts
+RIGHT JOIN rewardsReceiptItemList
+ ON Receipt._id = rewardsReceiptItemList._id
+LEFT JOIN Brands
+ ON Brands.barcode = rewardsReceiptItemList.barcode
+LEFT JOIN Users
+ ON Receipts.userId = Users._id
+WHERE Users.CreatedDate >= DATE_SUB(now(), INTERVAL 6 month)
+GROUP BY Brand.name
+ORDER BY spend DESC
+LIMIT 1;
+
+==========================================================
+
+6) Which brand has the most transactions among users who were created within the past 6 months?
+
+SELECT Brand.name, COUNT(Receipts.totalSpent) AS transactions
+FROM Receipts
+RIGHT JOIN rewardsReceiptItemList
+ ON Receipt._id = rewardsReceiptItemList._id
+LEFT JOIN Brands
+ ON Brands.barcode = rewardsReceiptItemList.barcode
+LEFT JOIN Users
+ ON Receipts.userId = Users._id
+WHERE Users.CreatedDate >= DATE_SUB(now(), INTERVAL 6 month)
+GROUP BY Brand.name
+ORDER BY transactions DESC
+LIMIT 1;
+
+
+
+____________________________ x __________________________
+
+
+
+
+
+
+
+
