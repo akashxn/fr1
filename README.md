@@ -1,7 +1,9 @@
 # Assesment Submission
 Akash Negi | akashxn@icloud.com
 
-**Note:** Everything could be understood using just this readme file, but feel free to check "fr.ipynb" for python code and "fr_SQL.txt" for SQL code.
+**Note:**
+- Everything could be understood using just this readme file, but feel free to check "fr.ipynb" for python code and "fr_SQL.txt" for SQL code.
+- I used MySQL
 <br>
 
 # First: Review Existing Unstructured Data and Diagram a New Structured Relational Data Model
